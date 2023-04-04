@@ -3,17 +3,17 @@ import { Ray } from "./Ray";
 import { Vector3 } from "./Vector3";
 
 export class Sphere implements Hittable {
-  constructor(public center: Vector3, public radius: number){
+  constructor(public center: Vector3, public radius: number) {
   }
 
-  hit(r: Ray, tMin: number, tMax: number, rec: HitRecord): boolean {
+  hit(r: Ray, tMin: number, tMax: number): HitRecord | null {
     const oc = Vector3.sub(r.origin, this.center)
     const a = r.direction.lengthSquared()
     const halfB = Vector3.dot(oc, r.direction)
     const c = oc.lengthSquared() - this.radius * this.radius
     const discriminant = halfB * halfB -  a * c
     if (discriminant < 0) {
-      return false
+      return null
     }
     const sqrtd = Math.sqrt(discriminant)
 
@@ -21,14 +21,16 @@ export class Sphere implements Hittable {
     if (root < tMin || tMax < root) {
       root = (-halfB + sqrtd) / a
       if (root < tMin || tMax < root) {
-        return false
+        return null
       }
     }
 
-    rec.t = root
-    rec.p = r.at(rec.t)
+    const rec = new HitRecord(
+      r.at(root),
+      root,
+    )
     const outwardNormal = Vector3.div(Vector3.sub(rec.p, this.center), this.radius)
     rec.setFaceNormal(r, outwardNormal)
-    return true
+    return rec;
   }
 }
