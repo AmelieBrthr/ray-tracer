@@ -52,14 +52,14 @@ function setPixel(x: number, y: number, r: number, g: number, b: number, a: numb
 
 function hitSphere(center: Vector3, radius: number, r: Ray): number{
   const oc = Vector3.sub(r.origin, center)
-  const a = Vector3.dot(r.direction, r.direction)
-  const b = Vector3.dot(oc, r.direction) * 2
-  const c = Vector3.dot(oc, oc) - radius * radius
-  const discriminant = b * b - 4 * a * c
+  const a = r.direction.lengthSquared()
+  const halfB = Vector3.dot(oc, r.direction)
+  const c = oc.lengthSquared() - radius * radius
+  const discriminant = halfB * halfB -  a * c
   if (discriminant < 0) {
     return -1
   } else {
-    return (-b -Math.sqrt(discriminant)) / (2 * a)
+    return (-halfB -Math.sqrt(discriminant)) / a
   }
 }
 
