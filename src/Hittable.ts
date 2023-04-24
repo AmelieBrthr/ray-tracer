@@ -1,3 +1,4 @@
+import { Material } from "./Material";
 import { Ray } from "./Ray";
 import { Vector3 } from "./Vector3";
 
@@ -5,6 +6,7 @@ export class HitRecord {
   constructor(
     public p: Vector3,
     public t: number,
+    public mat: Material,
     public normal: Vector3 = new Vector3(),
     public frontFace: boolean = false,
   ) {

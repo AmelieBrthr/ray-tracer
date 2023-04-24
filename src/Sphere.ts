@@ -1,9 +1,14 @@
 import { HitRecord, Hittable } from "./Hittable";
+import { Material } from "./Material";
 import { Ray } from "./Ray";
 import { Vector3 } from "./Vector3";
 
 export class Sphere implements Hittable {
-  constructor(public center: Vector3, public radius: number) {
+  constructor(
+    public center: Vector3,
+    public radius: number,
+    public mat: Material
+    ) {
   }
 
   hit(r: Ray, tMin: number, tMax: number): HitRecord | null {
@@ -28,6 +33,7 @@ export class Sphere implements Hittable {
     const rec = new HitRecord(
       r.at(root),
       root,
+      this.mat
     )
     const outwardNormal = Vector3.div(Vector3.sub(rec.p, this.center), this.radius)
     rec.setFaceNormal(r, outwardNormal)
